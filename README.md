@@ -5,7 +5,7 @@
 
 This tool uses [gopassgen](https://github.com/sayanarijit/gopassgen) library to generate password based on given policy.
 
-### [Download](https://github.com/sayanarijit/gopgweb/archive/master.zip)
+### [Live demo](https://gopgweb.herokuapp.com) | [Download](https://github.com/sayanarijit/gopgweb/archive/master.zip)
 
 ***GoPGWeb uses relative path. Hence binary needs to be executed from where it is using `./` syntax via command-line or double-click via GUI***
 
