@@ -43,7 +43,7 @@ func GenerateAPI(w http.ResponseWriter, r *http.Request) {
 			p.CapsAlphaPool = v[0]
 		case "SmallAlphaPool":
 			p.SmallAlphaPool = v[0]
-		case "DigitAlphaPool":
+		case "DigitPool":
 			p.DigitPool = v[0]
 		case "SpclCharPool":
 			p.SpclCharPool = v[0]
