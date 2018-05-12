@@ -6,51 +6,16 @@ Docs		: https://github.com/sayanarijit/gopgweb#gopgweb
 */
 
 import (
-	"encoding/json"
-	"io/ioutil"
-	"net/http"
+	"flag"
 
-	"github.com/sayanarijit/gopassgen"
+	"github.com/sayanarijit/gopgweb/app"
 )
 
 func main() {
-	http.HandleFunc("/", index)
-	http.HandleFunc("/static/", static)
-	http.HandleFunc("/api/generate/", generateApi)
-	http.ListenAndServe(":8080", nil)
-}
+	host := flag.String("host", "0.0.0.0", "HTTP server url")
+	port := flag.Int("port", 8080, "HTTP server port")
 
-func index(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "templates/index.html")
-}
+	flag.Parse()
 
-func generateApi(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-
-	p := gopassgen.NewPolicy()
-
-	b, err := ioutil.ReadAll(r.Body)
-	defer r.Body.Close()
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	err = json.Unmarshal(b, &p)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-
-	password := gopassgen.Generate(p)
-
-	resp := map[string]string{"result": password}
-
-	jsonResp, _ := json.Marshal(resp)
-
-	w.Write(jsonResp)
-}
-
-func static(w http.ResponseWriter, r *http.Request) {
-	http.ServeFile(w, r, "."+r.URL.Path)
+	app.ServeHTTP(*host, *port)
 }

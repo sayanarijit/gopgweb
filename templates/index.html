@@ -30,68 +30,68 @@
 
         <div class="col s2">&nbsp;</div>
 
-        <form class="col s8">
+        <form class="col s8" id="generate" action="/api/generate">
 
           <div class="row">
-            <div class="input-field col s4">
-              <input id="MaxLength" type="number" class="validate" value="16">
+            <div class="input-field col l4 m6">
+              <input id="MaxLength" name="MaxLength" type="number" class="validate" placeholder="16">
               <label for="MaxLength">Maximum password length</label>
             </div>
-            <div class="input-field col s4">
-              <input id="MinLength" type="number" class="validate" value="6">
+            <div class="input-field col l4 m6">
+              <input id="MinLength" name="MinLength" type="number" class="validate" placeholder="6">
               <label for="MinLength">Minimum password length</label>
             </div>
-            <div class="input-field col s4">
-              <input id="MinCapsAlpha" type="number" class="validate">
+            <div class="input-field col l4 m6">
+              <input id="MinCapsAlpha" name="MinCapsAlpha" type="number" class="validate">
               <label for="MinCapsAlpha">Minimum capital letters</label>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s4">
-              <input id="MinSmallAlpha" type="number" class="validate">
+            <div class="input-field col l4 m6">
+              <input id="MinSmallAlpha" name="MinSmallAlpha" type="number" class="validate">
               <label for="MinSmallAlpha">Minimum small letters</label>
             </div>
-            <div class="input-field col s4">
-              <input id="MinDigits" type="number" class="validate">
+            <div class="input-field col l4 m6">
+              <input id="MinDigits" name="MinDigits" type="number" class="validate">
               <label for="MinDigits">Minimum digits</label>
             </div>
-            <div class="input-field col s4">
-              <input id="MinSpclChars" type="number" class="validate">
+            <div class="input-field col l4 m6">
+              <input id="MinSpclChars" name="MinSpclChars" type="number" class="validate">
               <label for="MinSpclChars">Minimum special characters</label>
             </div>
           </div>
 
           <div class="row">
-            <div class="input-field col s6">
-              <input id="CapsAlphaPool" type="text" class="validate" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+            <div class="input-field col l6">
+              <input id="CapsAlphaPool" name="CapsAlphaPool" type="text" class="validate" placeholder="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
               <label for="CapsAlphaPool">Permitted capital letters</label>
             </div>
-            <div class="input-field col s6">
-              <input id="SmallAlphaPool" type="text" class="validate" value="abcdefghijklmnopqrstuvwxyz">
+            <div class="input-field col l6">
+              <input id="SmallAlphaPool" name="SmallAlphaPool" type="text" class="validate" placeholder="abcdefghijklmnopqrstuvwxyz">
               <label for="SmallAlphaPool">Permitted capital letters</label>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="input-field col s6">
-              <input id="DigitPool" type="text" class="validate" value="0123456789">
+            <div class="input-field col l6">
+              <input id="DigitPool" name="DigitPool" type="text" class="validate" placeholder="0123456789">
               <label for="DigitPool">Permitted digits</label>
             </div>
-            <div class="input-field col s6">
-              <input id="SpclCharPool" type="text" class="validate" value="!@#$%^&*()-_=+,.?/:;{}[]~">
+            <div class="input-field col l6">
+              <input id="SpclCharPool" name="SpclCharPool" type="text" class="validate" placeholder="!@#$%^&*()-_=+,.?/:;{}[]~">
               <label for="SpclCharPool">Permitted special characters</label>
             </div>
           </div>
 
           <div class="row">
-            <div class="input-field col s12">
-              <h4><pre class="center" id="password">&nbsp;</pre></h4>
+            <div class="input-field col l3 m4 s5">
+              <button class="btn btn-large waves-effect waves-light" type="submit">GO</button>
+            </div>
+            <div class="input-field col l9 m8 s7 grey lighten-3 z-depth-2">
+              <pre class="center" id="password" style="overflow:auto">&nbsp;</pre>
             </div>
           </div>
 
-          <button class="btn btn-large waves-effect waves-light col s12" type="button" id="generate">Generate</button>
-          
+          <div class="row">
+            <div class="input-field col s12">
+              <input id="apilink" disabled />
+            </div>
+          </div>
         </form>
 
         <div class="col s2">&nbsp;</div>
@@ -102,8 +102,16 @@
     <script src="/static/jquery/3.3.1/jquery.min.js"></script>
 
     <script>
-      $("#generate").on("click", ()=>{
-        var data = {}
+      $(document).ready(()=>{
+        generate()
+        $("#generate").on("submit", e => {
+          e.preventDefault()
+          generate()
+        })
+      })
+
+      function generate() {
+        data = {}
 
         $("#MaxLength").val() && (data.MaxLength = $("#MaxLength").val())
         $("#MinLength").val() && (data.MinLength = $("#MinLength").val())
@@ -114,15 +122,16 @@
         $("#CapsAlphaPool").val() && (data.CapsAlphaPool = $("#CapsAlphaPool").val())
         $("#SmallAlphaPool").val() && (data.SmallAlphaPool = $("#SmallAlphaPool").val())
         $("#DigitPool").val() && (data.DigitPool = $("#DigitPool").val())
-        $("#SpclCharPool").val() && (data.SpclCharPool = $("#SpclCharPool").val())
+        $("#SpclCharPool").val() && (data.SpclCharPool = $("#SpclCharPool").val())        
 
-        console.log(data);
-        
-        
-        $.post("/api/generate", data).done(resp => {
+        url = window.location.href + "api/generate"
+        Object.keys(data).length > 0 && (url += "?" + $.param(data))
+
+        $("#apilink").val(url)
+        $.post(url).done(resp => {
           $("#password").text(resp.result)
         })
-      })
+      }
     </script>
 
   </body>
