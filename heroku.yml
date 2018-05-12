@@ -5,4 +5,4 @@ build:
     - go
 
 run:
-  web: gopgweb
+  web: gopgweb -port $PORT
