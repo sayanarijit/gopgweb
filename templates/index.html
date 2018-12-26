@@ -42,12 +42,12 @@
               <label for="MinLength">Minimum password length</label>
             </div>
             <div class="input-field col l4 m6">
-              <input id="MinCapsAlpha" name="MinCapsAlpha" type="number" class="validate">
-              <label for="MinCapsAlpha">Minimum capital letters</label>
+              <input id="MinUppers" name="MinUppers" type="number" class="validate">
+              <label for="MinUppers">Minimum upper case letters</label>
             </div>
             <div class="input-field col l4 m6">
-              <input id="MinSmallAlpha" name="MinSmallAlpha" type="number" class="validate">
-              <label for="MinSmallAlpha">Minimum small letters</label>
+              <input id="MinLowers" name="MinLowers" type="number" class="validate">
+              <label for="MinLowers">Minimum lower case letters</label>
             </div>
             <div class="input-field col l4 m6">
               <input id="MinDigits" name="MinDigits" type="number" class="validate">
@@ -61,12 +61,12 @@
 
           <div class="row">
             <div class="input-field col l6">
-              <input id="CapsAlphaPool" name="CapsAlphaPool" type="text" class="validate" placeholder="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
-              <label for="CapsAlphaPool">Permitted capital letters</label>
+              <input id="UpperPool" name="UpperPool" type="text" class="validate" placeholder="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+              <label for="UpperPool">Permitted upper case letters</label>
             </div>
             <div class="input-field col l6">
-              <input id="SmallAlphaPool" name="SmallAlphaPool" type="text" class="validate" placeholder="abcdefghijklmnopqrstuvwxyz">
-              <label for="SmallAlphaPool">Permitted small letters</label>
+              <input id="LowerPool" name="LowerPool" type="text" class="validate" placeholder="abcdefghijklmnopqrstuvwxyz">
+              <label for="LowerPool">Permitted lower case letters</label>
             </div>
             <div class="input-field col l6">
               <input id="DigitPool" name="DigitPool" type="text" class="validate" placeholder="0123456789">
@@ -108,19 +108,23 @@
           e.preventDefault()
           generate()
         })
+        $(".input-field").keyup(e => {
+          $("#MaxLength").attr("class", "validate")
+        })
       })
 
       function generate() {
+        $("#MaxLength").attr("data-error", "")
         data = {}
 
         $("#MaxLength").val() && (data.MaxLength = $("#MaxLength").val())
         $("#MinLength").val() && (data.MinLength = $("#MinLength").val())
-        $("#MinCapsAlpha").val() && (data.MinCapsAlpha = $("#MinCapsAlpha").val())
-        $("#MinSmallAlpha").val() && (data.MinSmallAlpha = $("#MinSmallAlpha").val())
+        $("#MinUppers").val() && (data.MinUppers = $("#MinUppers").val())
+        $("#MinLowers").val() && (data.MinLowers = $("#MinLowers").val())
         $("#MinDigits").val() && (data.MinDigits = $("#MinDigits").val())
         $("#MinSpclChars").val() && (data.MinSpclChars = $("#MinSpclChars").val())
-        $("#CapsAlphaPool").val() && (data.CapsAlphaPool = $("#CapsAlphaPool").val())
-        $("#SmallAlphaPool").val() && (data.SmallAlphaPool = $("#SmallAlphaPool").val())
+        $("#UpperPool").val() && (data.UpperPool = $("#UpperPool").val())
+        $("#LowerPool").val() && (data.LowerPool = $("#LowerPool").val())
         $("#DigitPool").val() && (data.DigitPool = $("#DigitPool").val())
         $("#SpclCharPool").val() && (data.SpclCharPool = $("#SpclCharPool").val())        
 
@@ -130,6 +134,10 @@
         $("#apilink").val(url)
         $.post(url).done(resp => {
           $("#password").text(resp.result)
+        }).fail(err => {
+          $("#MaxLength").attr("data-error", err.responseJSON.error)
+          $("#password").text("error: " + err.responseJSON.error)
+          $("#MaxLength").attr("class", "invalid")
         })
       }
     </script>
