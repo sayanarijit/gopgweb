@@ -9,10 +9,18 @@ This tool uses [gopassgen](https://github.com/sayanarijit/gopassgen) library to 
 
 ***GoPGWeb uses relative path. Hence binary needs to be executed from where it is using `./` syntax via command-line or double-click via GUI***
 
+### Compile and run
+
+```bash
+git clone https://github.com/sayanarijit/gopgweb.git
+go build
+./gopgweb
+```
+
 ### Command-line help menu
 
 ```bash
-Usage of ./gopgweb.linux-amd64:
+Usage of gopgweb:
   -host string
         HTTP server url (default "0.0.0.0")
   -port int
