@@ -13,7 +13,7 @@ This tool uses [gopassgen](https://github.com/sayanarijit/gopassgen) library to 
 
 ```bash
 git clone https://github.com/sayanarijit/gopgweb.git
-go build
+cd gopgweb && go build
 ./gopgweb
 ```
 
