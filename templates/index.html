@@ -108,13 +108,12 @@
           e.preventDefault()
           generate()
         })
-        $(".input-field").keyup(e => {
+        $(".input-field").click(e => {
           $("#MaxLength").attr("class", "validate")
         })
       })
 
       function generate() {
-        $("#MaxLength").attr("data-error", "")
         data = {}
 
         $("#MaxLength").val() && (data.MaxLength = $("#MaxLength").val())
@@ -135,9 +134,10 @@
         $.post(url).done(resp => {
           $("#password").text(resp.result)
         }).fail(err => {
-          $("#MaxLength").attr("data-error", err.responseJSON.error)
           $("#password").text("error: " + err.responseJSON.error)
-          $("#MaxLength").attr("class", "invalid")
+          if (err.responseJSON.error == "sum of minimum character lengths exceeded maximum password length") {
+            $("#MaxLength").attr("class", "invalid")
+          }
         })
       }
     </script>
